@@ -120,4 +120,9 @@ public class Vector4 {
 	{
 		return coord[3]/coord[4];
 	}
+	
+	public double getCoord(int i)
+	{
+		return coord[i]/coord[4];
+	}
 }
