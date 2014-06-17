@@ -100,4 +100,24 @@ public class Vector4 {
 		for(int i=0; i<4; i++)
 			coord[i] /= length;
 	}
+	
+	public double x()
+	{
+		return coord[0]/coord[4];
+	}
+	
+	public double y()
+	{
+		return coord[1]/coord[4];
+	}
+	
+	public double z()
+	{
+		return coord[2]/coord[4];
+	}
+	
+	public double w()
+	{
+		return coord[3]/coord[4];
+	}
 }
