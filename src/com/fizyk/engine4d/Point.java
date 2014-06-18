@@ -2,7 +2,6 @@ package com.fizyk.engine4d;
 
 import com.fizyk.math4d.Hyperplane;
 import com.fizyk.math4d.Vector4;
-import com.fizyk.math4d.Hyperplane.Position;
 
 public class Point implements Primitive {
 	
@@ -35,7 +34,7 @@ public class Point implements Primitive {
 
 	@Override
 	public Primitive intersect(Hyperplane h) {
-		if(h.inPlane(v.pos) == Position.IN)
+		if(Math.abs(h.dotPlane(v.pos)) < 1e-15)
 			return this;
 		else
 			return null;
