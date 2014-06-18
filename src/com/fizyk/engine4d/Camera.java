@@ -97,4 +97,9 @@ public class Camera {
 			return new Vector4();	// to suppress an error
 		}
 	}
+	
+	public Hyperplane getHyperplane()
+	{
+		return new Hyperplane(normal, -normal.dot(location));
+	}
 }
