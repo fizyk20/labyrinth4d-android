@@ -31,8 +31,8 @@ public class Point extends Primitive {
 		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
 		gl.glEnableClientState(GL10.GL_COLOR_ARRAY);
 		
-		gl.glVertexPointer(1, GL10.GL_FLOAT, 0, getVData());
-		gl.glColorPointer(1, GL10.GL_FLOAT, 0, getCData());
+		gl.glVertexPointer(3, GL10.GL_FLOAT, 0, getVData());
+		gl.glColorPointer(4, GL10.GL_FLOAT, 0, getCData());
 		
 		gl.glDrawArrays(GL10.GL_POINTS, 0, 1);
 		

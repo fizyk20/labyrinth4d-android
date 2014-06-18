@@ -33,6 +33,7 @@ public class Vector4 {
 		Vector4 res = new Vector4();
 		for(int i=0; i<4; i++)
 			res.coord[i] = coord[i]/coord[4] + arg.coord[i]/arg.coord[4];
+		res.coord[4] = 1.;
 		return res;
 	}
 	
@@ -41,6 +42,7 @@ public class Vector4 {
 		Vector4 res = new Vector4();
 		for(int i=0; i<4; i++)
 			res.coord[i] = coord[i]/coord[4] - arg.coord[i]/arg.coord[4];
+		res.coord[4] = 1.;
 		return res;
 	}
 	

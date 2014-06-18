@@ -13,6 +13,7 @@ public class MatrixStack {
 	{
 		stack = new Vector<Matrix4>();
 		curMatrix = new Matrix4();
+		curMatrix.loadIdentity();
 		stack.clear();
 	}
 	

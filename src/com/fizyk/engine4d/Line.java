@@ -34,8 +34,8 @@ public class Line extends Primitive {
 		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
 		gl.glEnableClientState(GL10.GL_COLOR_ARRAY);
 		
-		gl.glVertexPointer(2, GL10.GL_FLOAT, 0, getVData());
-		gl.glColorPointer(2, GL10.GL_FLOAT, 0, getCData());
+		gl.glVertexPointer(3, GL10.GL_FLOAT, 0, getVData());
+		gl.glColorPointer(4, GL10.GL_FLOAT, 0, getCData());
 		
 		gl.glDrawArrays(GL10.GL_LINES, 0, 2);
 		

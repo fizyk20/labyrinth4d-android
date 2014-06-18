@@ -48,7 +48,7 @@ public class Quad extends Primitive {
 		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
 		gl.glEnableClientState(GL10.GL_COLOR_ARRAY);
 		
-		gl.glVertexPointer(4, GL10.GL_FLOAT, 0, getVData());
+		gl.glVertexPointer(3, GL10.GL_FLOAT, 0, getVData());
 		gl.glColorPointer(4, GL10.GL_FLOAT, 0, getCData());
 		
 		ShortBuffer drawListBuffer;
