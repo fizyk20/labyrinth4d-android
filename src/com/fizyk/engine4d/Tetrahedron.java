@@ -1,13 +1,18 @@
 package com.fizyk.engine4d;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.ShortBuffer;
 import java.util.Vector;
+
+import javax.microedition.khronos.opengles.GL10;
 
 import com.fizyk.math4d.Hyperplane;
 import com.fizyk.math4d.Vector4;
 
-public class Tetrahedron implements Primitive {
-
-	private Vertex[] v;
+public class Tetrahedron extends Primitive {
+	
+	private short drawOrder[] = { 0, 1, 2, 0, 2, 3, 0, 3, 1, 2, 1, 3 };
 	
 	public Tetrahedron(Vector4 pos1, Color c1, Vector4 pos2, Color c2, Vector4 pos3, Color c3, Vector4 pos4, Color c4)
 	{
@@ -37,11 +42,28 @@ public class Tetrahedron implements Primitive {
 	}
 	
 	@Override
-	public void draw() {
-		// TODO Auto-generated method stub
-
+	public void draw(GL10 gl)
+	{
+		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
+		gl.glEnableClientState(GL10.GL_COLOR_ARRAY);
+		
+		gl.glVertexPointer(4, GL10.GL_FLOAT, 0, getVData());
+		gl.glColorPointer(4, GL10.GL_FLOAT, 0, getCData());
+		
+		ShortBuffer drawListBuffer;
+		// initialize byte buffer for the draw list
+        ByteBuffer dlb = ByteBuffer.allocateDirect(drawOrder.length * 2);
+        dlb.order(ByteOrder.nativeOrder());
+        drawListBuffer = dlb.asShortBuffer();
+        drawListBuffer.put(drawOrder);
+        drawListBuffer.position(0);
+		
+		gl.glDrawElements(GL10.GL_TRIANGLES, 4, GL10.GL_UNSIGNED_SHORT, drawListBuffer);
+		
+		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
+		gl.glDisableClientState(GL10.GL_COLOR_ARRAY);
 	}
-
+	
 	@Override
 	public Vertex vertex(int i) {
 		if(i < 0 || i > 3)

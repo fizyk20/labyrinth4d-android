@@ -1,11 +1,11 @@
 package com.fizyk.engine4d;
 
+import javax.microedition.khronos.opengles.GL10;
+
 import com.fizyk.math4d.Hyperplane;
 import com.fizyk.math4d.Vector4;
 
-public class Line implements Primitive {
-
-	private Vertex[] v;
+public class Line extends Primitive {
 	
 	public Line(Vector4 pos1, Color c1, Vector4 pos2, Color c2)
 	{
@@ -29,9 +29,18 @@ public class Line implements Primitive {
 	}
 	
 	@Override
-	public void draw() {
-		// TODO Auto-generated method stub
-
+	public void draw(GL10 gl)
+	{
+		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
+		gl.glEnableClientState(GL10.GL_COLOR_ARRAY);
+		
+		gl.glVertexPointer(2, GL10.GL_FLOAT, 0, getVData());
+		gl.glColorPointer(2, GL10.GL_FLOAT, 0, getCData());
+		
+		gl.glDrawArrays(GL10.GL_LINES, 0, 2);
+		
+		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
+		gl.glDisableClientState(GL10.GL_COLOR_ARRAY);
 	}
 
 	@Override
