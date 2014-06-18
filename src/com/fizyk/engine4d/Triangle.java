@@ -1,5 +1,7 @@
 package com.fizyk.engine4d;
 
+import java.util.Vector;
+
 import com.fizyk.math4d.Hyperplane;
 import com.fizyk.math4d.Vector4;
 
@@ -23,6 +25,14 @@ public class Triangle implements Primitive {
 		v[2] = new Vertex(pos3);
 	}
 	
+	public Triangle(Vertex v1, Vertex v2, Vertex v3)
+	{
+		v = new Vertex[3];
+		v[0] = v1;
+		v[1] = v2;
+		v[2] = v3;
+	}
+	
 	@Override
 	public void draw() {
 		// TODO Auto-generated method stub
@@ -42,8 +52,52 @@ public class Triangle implements Primitive {
 	}
 
 	@Override
-	public Primitive intersect(Hyperplane h) {
-		// TODO Auto-generated method stub
+	public Primitive intersect(Hyperplane h)
+	{
+		// first we find all non-null intersections of the sides
+		Vector<Primitive> p = new Vector<Primitive>();
+		
+		Primitive tmp = new Line(v[0], v[1]).intersect(h);
+		if(tmp != null) p.add(tmp);
+		
+		tmp = new Line(v[0], v[2]).intersect(h);
+		if(tmp != null) p.add(tmp);
+		
+		tmp = new Line(v[1], v[2]).intersect(h);
+		if(tmp != null) p.add(tmp);
+		
+		if(p.size() == 0)	// if there are none, there is no intersection
+			return null;
+		
+		if(p.size() == 1)	//if there is one, this is our intersection (should never happen)
+			return p.firstElement();
+		
+		if(p.size() == 2)	//if there are two, we should have two points
+		{
+			Point pt1 = (Point) p.get(0);
+			Point pt2 = (Point) p.get(1);
+			if(pt1.getClass() != Point.class || pt2.getClass() != Point.class)
+				return null;
+			
+			// if the points are actually one point, return a point
+			if(pt1.vertex(0).pos == pt2.vertex(0).pos)
+				return pt1;
+			
+			// else, they denote a line - return this line
+			return new Line(pt1.vertex(0), pt2.vertex(0));
+		}
+		
+		// by now we are sure that all 3 lines yielded an intersection
+		if(p.get(0).getClass() == Line.class &&
+		   p.get(1).getClass() == Line.class &&
+		   p.get(2).getClass() == Line.class)
+			return this;
+		
+		// if all 3 weren't lines, then we have a line and 2 points -> return line
+		for(int i = 0; i < 3; i++)
+			if(p.get(i).getClass() == Line.class) return p.get(i);
+		
+		// the execution should never get here, but just in case we return null
 		return null;
 	}
 
