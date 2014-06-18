@@ -74,10 +74,11 @@ public class Triangle implements Primitive {
 		
 		if(p.size() == 2)	//if there are two, we should have two points
 		{
+			if(p.get(0).getClass() != Point.class || p.get(1).getClass() != Point.class)
+				return null;
+			
 			Point pt1 = (Point) p.get(0);
 			Point pt2 = (Point) p.get(1);
-			if(pt1.getClass() != Point.class || pt2.getClass() != Point.class)
-				return null;
 			
 			// if the points are actually one point, return a point
 			if(pt1.vertex(0).pos == pt2.vertex(0).pos)
