@@ -16,6 +16,11 @@ public class Point implements Primitive {
 	{
 		v = new Vertex(pos);
 	}
+	
+	public Point(Vertex v)
+	{
+		this.v = v;
+	}
 
 	@Override
 	public void draw() {
