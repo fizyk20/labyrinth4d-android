@@ -16,7 +16,7 @@ public class Hyperplane {
 	public Position inPlane(Vector4 point)
 	{
 		double dot = normal.dot(point) + param;
-		return (dot < 0.)  ? Position.BELOW :
-			   (dot == 0.) ?    Position.IN : Position.ABOVE;
+		return (dot < -1e-15)  					? Position.BELOW :
+			   (dot > -1e-15 && dot < 1e-15) 	?    Position.IN : Position.ABOVE;
 	}
 }

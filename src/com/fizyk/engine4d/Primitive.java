@@ -1,13 +1,13 @@
 package com.fizyk.engine4d;
 
-public class Primitive {
+import com.fizyk.math4d.Hyperplane;
 
-	public Vertex[] vert;
+public interface Primitive
+{
+	public void draw();
 	
-	public Primitive()
-	{
-		vert = new Vertex[4];
-		for(int i=0; i<4; i++)
-			vert[i] = new Vertex();
-	}
+	public Vertex vertex(int i);
+	public int nVertices();
+	
+	public Primitive intersect(Hyperplane h);
 }
