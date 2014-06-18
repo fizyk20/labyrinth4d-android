@@ -21,6 +21,13 @@ public class Line implements Primitive {
 		v[1] = new Vertex(pos2);
 	}
 	
+	public Line(Vertex v1, Vertex v2)
+	{
+		v = new Vertex[2];
+		v[0] = v1;
+		v[1] = v2;
+	}
+	
 	@Override
 	public void draw() {
 		// TODO Auto-generated method stub
@@ -40,9 +47,27 @@ public class Line implements Primitive {
 	}
 
 	@Override
-	public Primitive intersect(Hyperplane h) {
-		// TODO Auto-generated method stub
-		return null;
+	public Primitive intersect(Hyperplane h) 
+	{
+		double dot1 = h.dotPlane(v[0].pos);
+		double dot2 = h.dotPlane(v[1].pos);
+		
+		if(dot1 * dot2 > 0)
+			return null;
+		
+		if(dot1 == 0 && dot2 == 0)
+			return this;
+		
+		if(dot1 == 0)
+			return new Point(v[0]);
+		if(dot2 == 0)
+			return new Point(v[1]);
+		
+		Vector4 v1 = v[0].pos.mul(dot2/(dot2-dot1));
+		Vector4 v2 = v[1].pos.mul(-dot1/(dot2-dot1));
+		Vector4 c1 = v[0].c.toVector().mul(dot2/(dot2-dot1));
+		Vector4 c2 = v[1].c.toVector().mul(-dot1/(dot2-dot1));
+		return new Point(v1.add(v2), new Color(c1.add(c2)));
 	}
 
 }
