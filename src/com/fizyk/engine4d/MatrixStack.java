@@ -11,6 +11,8 @@ public class MatrixStack {
 	
 	public MatrixStack()
 	{
+		stack = new Vector<Matrix4>();
+		curMatrix = new Matrix4();
 		stack.clear();
 	}
 	
