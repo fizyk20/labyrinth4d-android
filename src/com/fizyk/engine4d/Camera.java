@@ -102,4 +102,16 @@ public class Camera {
 	{
 		return new Hyperplane(normal, -normal.dot(location));
 	}
+	
+	public Vector4 calculateLocal(Vector4 pos)
+	{
+		Vector4 tmp;
+		tmp = pos.sub(location);
+		double x, y, z, w;
+		x = tmp.dot(right)/right.len();
+		y = tmp.dot(up)/up.len();
+		z = tmp.dot(lookat)/lookat.len();
+		w = tmp.dot(normal)/normal.len();
+		return new Vector4(x, y, z, w);
+	}
 }
