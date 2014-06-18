@@ -4,17 +4,27 @@ import com.fizyk.math4d.*;
 
 public class Vertex {
 
-	public Vector4 pt;
-	public double r, g, b, a;
+	public Vector4 pos;
+	public Color c;
+	
+	public Vertex(Vector4 pos, Color c)
+	{
+		this.pos = pos;
+		this.c = c;
+	}
 	
 	public Vertex()
 	{
-		pt = new Vector4();
-		a = 1.;
+		this(new Vector4(), Color.current);
+	}
+	
+	public Vertex(Vector4 pos)
+	{
+		this(pos, Color.current);
 	}
 	
 	public boolean equals(Vertex arg)
 	{
-		return pt.equals(arg);
+		return pos.equals(arg);
 	}
 }
