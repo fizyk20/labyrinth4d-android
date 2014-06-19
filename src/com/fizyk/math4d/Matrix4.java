@@ -55,7 +55,7 @@ public class Matrix4 {
 		result.loadIdentity();
 		
 		for(int i=0; i<4; i++)
-			result.elem[4][i] = v.getCoord(i);
+			result.elem[i][4] = v.getCoord(i);
 		
 		return result;
 	}
