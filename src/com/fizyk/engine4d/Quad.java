@@ -5,7 +5,7 @@ import java.nio.ByteOrder;
 import java.nio.ShortBuffer;
 import java.util.Vector;
 
-import javax.microedition.khronos.opengles.GL10;
+import android.opengl.GLES20;
 
 import com.fizyk.math4d.Hyperplane;
 import com.fizyk.math4d.Vector4;
@@ -43,13 +43,15 @@ public class Quad extends Primitive {
 	}
 	
 	@Override
-	public void draw(GL10 gl)
+	public void draw(Renderer graph4d)
 	{
-		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
-		gl.glEnableClientState(GL10.GL_COLOR_ARRAY);
-		
-		gl.glVertexPointer(3, GL10.GL_FLOAT, 0, getVData());
-		gl.glColorPointer(4, GL10.GL_FLOAT, 0, getCData());
+		GLES20.glEnableVertexAttribArray(graph4d.getVertexHandle());
+		GLES20.glVertexAttribPointer(graph4d.getVertexHandle(), 3, GLES20.GL_FLOAT, false,
+	            0, getVData());
+
+		GLES20.glEnableVertexAttribArray(graph4d.getColorHandle());
+		GLES20.glVertexAttribPointer(graph4d.getColorHandle(), 4, GLES20.GL_FLOAT, false,
+	            0, getCData());
 		
 		ShortBuffer drawListBuffer;
 		// initialize byte buffer for the draw list
@@ -59,10 +61,10 @@ public class Quad extends Primitive {
         drawListBuffer.put(drawOrder);
         drawListBuffer.position(0);
 		
-		gl.glDrawElements(GL10.GL_TRIANGLES, 2, GL10.GL_UNSIGNED_SHORT, drawListBuffer);
+		GLES20.glDrawElements(GLES20.GL_TRIANGLES, 6, GLES20.GL_UNSIGNED_SHORT, drawListBuffer);
 		
-		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
-		gl.glDisableClientState(GL10.GL_COLOR_ARRAY);
+		GLES20.glDisableVertexAttribArray(graph4d.getVertexHandle());
+		GLES20.glDisableVertexAttribArray(graph4d.getColorHandle());
 	}
 
 	@Override

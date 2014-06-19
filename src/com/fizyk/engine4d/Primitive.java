@@ -4,8 +4,6 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
-import javax.microedition.khronos.opengles.GL10;
-
 import com.fizyk.math4d.Hyperplane;
 
 public class Primitive
@@ -36,7 +34,7 @@ public class Primitive
 		return cData;
 	}
 	
-	public void draw(GL10 gl)
+	public void draw(Renderer graph4d)
 	{
 	}
 	
