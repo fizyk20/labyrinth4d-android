@@ -13,8 +13,7 @@ public class MatrixStack {
 	{
 		stack = new Vector<Matrix4>();
 		curMatrix = new Matrix4();
-		curMatrix.loadIdentity();
-		stack.clear();
+		zeroStack();
 	}
 	
 	public void pushMatrix()
@@ -47,5 +46,6 @@ public class MatrixStack {
 	public void zeroStack()
 	{
 		stack.clear();
+		loadIdentity();
 	}
 }
