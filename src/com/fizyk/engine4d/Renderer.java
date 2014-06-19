@@ -4,6 +4,8 @@ import java.util.Vector;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import android.opengl.GLU;
+
 import com.fizyk.math4d.Matrix4;
 import com.fizyk.math4d.Vector4;
 
@@ -28,7 +30,7 @@ public class Renderer {
 		float ratio = (float)width/height;
 		gl.glMatrixMode(GL10.GL_PROJECTION);        // set matrix to projection mode
 	    gl.glLoadIdentity();                        // reset the matrix to its default state
-	    gl.glFrustumf(-ratio, ratio, -1, 1, 0, 1000);  // apply the projection matrix
+	    GLU.gluPerspective(gl, 45.f, ratio, 1.f, 1000.f);  // apply the projection matrix
 	}
 	
 	public void pushMatrix()
@@ -119,6 +121,7 @@ public class Renderer {
 	
 	public void render(GL10 gl)
 	{
+		matrixStack.zeroStack();
 		localBuffer.clear();
 		while(primBuffer.size() > 0)
 		{
@@ -136,7 +139,8 @@ public class Renderer {
 		}
 		
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
-	    gl.glLoadIdentity(); 
+	    gl.glLoadIdentity();
+	    GLU.gluLookAt(gl, 0.f, 0.f, 0.f, 0.f, 0.f, -1.f, 0.f, 1.f, 0.f);
 	    
 	    // draw local buffer
 	    for(int i = 0; i < localBuffer.size(); i++)
