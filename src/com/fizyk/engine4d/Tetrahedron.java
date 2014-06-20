@@ -75,9 +75,9 @@ public class Tetrahedron extends Primitive {
 		{
 			Vector4 v1 = v[drawOrder[i*3 + 1]].pos.sub(v[drawOrder[i*3 + 0]].pos);
 			Vector4 v2 = v[drawOrder[i*3 + 2]].pos.sub(v[drawOrder[i*3 + 0]].pos);
-			Vector4 normal = Vector4.crossProduct(v2, v1, new Vector4(0.,0.,0.,1.));
+			Vector4 normal = Vector4.crossProduct3(v2, v1);
 			normal.normalize();
-			float[] data = {(float)normal.getCoord(0), (float)normal.getCoord(1), (float)normal.getCoord(2)};
+			float[] data = {(float)normal.x(), (float)normal.y(), (float)normal.z()};
 			cData.put(data);
 			cData.put(data);
 			cData.put(data);

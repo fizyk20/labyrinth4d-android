@@ -137,4 +137,13 @@ public class Vector4 {
 		result.coord[3] = (v1.x()*v2.y()*v3.z())+(v1.y()*v2.z()*v3.x())+(v1.z()*v2.x()*v3.y())-(v1.x()*v2.z()*v3.y())-(v1.y()*v2.x()*v3.z())-(v1.z()*v2.y()*v3.x());
 		return result;
 	}
+	
+	public static Vector4 crossProduct3(Vector4 arg1, Vector4 arg2)
+	{
+		Vector4 result = new Vector4();
+		result.coord[0] = (arg1.y()*arg2.z())-(arg1.z()*arg2.y());
+		result.coord[1] = (arg1.z()*arg2.x())-(arg1.x()*arg2.z());
+		result.coord[2] = (arg1.x()*arg2.y())-(arg1.y()*arg2.x());
+		return result;
+	}
 }

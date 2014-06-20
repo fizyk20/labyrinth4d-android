@@ -3,7 +3,6 @@ package com.fizyk.engine4d;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
-import java.nio.ShortBuffer;
 import java.util.Vector;
 
 import android.opengl.GLES20;
@@ -12,9 +11,6 @@ import com.fizyk.math4d.Hyperplane;
 import com.fizyk.math4d.Vector4;
 
 public class Quad extends Primitive {
-
-	private Vertex[] v;
-	private short drawOrder[] = { 0, 1, 2, 0, 2, 3 };
 	
 	public Quad(Vector4 pos1, Color c1, Vector4 pos2, Color c2, Vector4 pos3, Color c3, Vector4 pos4, Color c4)
 	{
@@ -23,6 +19,7 @@ public class Quad extends Primitive {
 		v[1] = new Vertex(pos2, c2);
 		v[2] = new Vertex(pos3, c3);
 		v[3] = new Vertex(pos4, c4);
+		sortVertices();
 	}
 	
 	public Quad(Vector4 pos1, Vector4 pos2, Vector4 pos3, Vector4 pos4)
@@ -32,6 +29,7 @@ public class Quad extends Primitive {
 		v[1] = new Vertex(pos2);
 		v[2] = new Vertex(pos3);
 		v[3] = new Vertex(pos4);
+		sortVertices();
 	}
 	
 	public Quad(Vertex v1, Vertex v2, Vertex v3, Vertex v4)
@@ -41,6 +39,48 @@ public class Quad extends Primitive {
 		v[1] = v2;
 		v[2] = v3;
 		v[3] = v4;
+		sortVertices();
+	}
+	
+	private void sortVertices()
+	{
+		Vector4 v0 = new Vector4();
+		Vector4 v1 = new Vector4();
+		Vector4 v2 = new Vector4();
+		int vakt;
+		
+		double[] scal = new double[3];
+		v0 = v[1].pos.sub(v[0].pos);
+		v1 = v[2].pos.sub(v[0].pos);
+		v2 = v[3].pos.sub(v[0].pos);
+		scal[0] = (v1.dot(v0))/(v1.len()*v0.len());
+		scal[1] = (v2.dot(v0))/(v2.len()*v0.len());
+		scal[2] = (v2.dot(v1))/(v2.len()*v1.len());
+		vakt = (scal[0] < scal[1]) ? 0 : 1;
+		vakt = (scal[2] < scal[vakt]) ? 2 : vakt;
+		
+		Vertex[] v_new = new Vertex[4];
+		v_new[0] = v[0];
+		
+		switch(vakt)
+		{
+		case 0:
+			v_new[1] = v[1];
+			v_new[2] = v[2];
+			v_new[3] = v[3];
+			break;
+		case 1:
+			v_new[1] = v[1];
+			v_new[2] = v[3];
+			v_new[3] = v[2];
+			break;
+		case 2:
+			v_new[1] = v[2];
+			v_new[2] = v[3];
+			v_new[3] = v[1];
+			break;
+		}
+		v = v_new;
 	}
 	
 	public FloatBuffer getNormals()
@@ -51,7 +91,7 @@ public class Quad extends Primitive {
 		
 		Vector4 v1 = v[1].pos.sub(v[0].pos);
 		Vector4 v2 = v[2].pos.sub(v[0].pos);
-		Vector4 normal = Vector4.crossProduct(v1, v2, new Vector4(0.,0.,0.,1.));
+		Vector4 normal = Vector4.crossProduct3(v2, v1);
 		normal.normalize();
 		
 		for(int i = 0; i < 4; i++)
@@ -80,15 +120,7 @@ public class Quad extends Primitive {
 		GLES20.glVertexAttribPointer(normalHandle, 3, GLES20.GL_FLOAT, false,
 	            0, getNormals());
 		
-		ShortBuffer drawListBuffer;
-		// initialize byte buffer for the draw list
-        ByteBuffer dlb = ByteBuffer.allocateDirect(drawOrder.length * 2);
-        dlb.order(ByteOrder.nativeOrder());
-        drawListBuffer = dlb.asShortBuffer();
-        drawListBuffer.put(drawOrder);
-        drawListBuffer.position(0);
-		
-		GLES20.glDrawElements(GLES20.GL_TRIANGLES, 6, GLES20.GL_UNSIGNED_SHORT, drawListBuffer);
+		GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, 4);
 		
 		GLES20.glDisableVertexAttribArray(vertexHandle);
 		GLES20.glDisableVertexAttribArray(colorHandle);

@@ -23,7 +23,7 @@ public class LightShader extends Shader {
 			+ "   float d; 			\n"
 			+ "   vec3 lightDir = normalize(vec3(u_lightDir));\n"
 			+ "   vec3 normal = normalize(vec3(a_Normal));\n"
-			+ "   d = dot(-lightDir, normal);\n"
+			+ "   d = abs(dot(-lightDir, normal));\n"
 			+ "   v_Color = a_Color * max(d, 0.1);     \n"     // Pass the color through to the fragment shader.
 													// It will be interpolated across the triangle.
 			+ "   gl_Position = u_MVPMatrix	\n"     // gl_Position is a special variable used to store the final position.

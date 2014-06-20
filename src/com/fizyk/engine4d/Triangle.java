@@ -44,7 +44,7 @@ public class Triangle extends Primitive {
 		
 		Vector4 v1 = v[1].pos.sub(v[0].pos);
 		Vector4 v2 = v[2].pos.sub(v[0].pos);
-		Vector4 normal = Vector4.crossProduct(v1, v2, new Vector4(0.,0.,0.,1.));
+		Vector4 normal = Vector4.crossProduct3(v2, v1);
 		normal.normalize();
 		
 		for(int i = 0; i < 3; i++)
@@ -71,7 +71,7 @@ public class Triangle extends Primitive {
 	            0, getCData());
 
 		GLES20.glEnableVertexAttribArray(normalHandle);
-		GLES20.glVertexAttribPointer(normalHandle, 4, GLES20.GL_FLOAT, false,
+		GLES20.glVertexAttribPointer(normalHandle, 3, GLES20.GL_FLOAT, false,
 	            0, getNormals());
 		
 		GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, 3);
