@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Labirynt 4D</string>
+    <string name="action_settings">Ustawienia</string>
+    <string name="button_start">Start</string>
+    <string name="text_welcome">Witaj w Labiryncie 4D!</string>
+
+</resources>
