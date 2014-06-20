@@ -140,11 +140,73 @@ public class Renderer {
 			new Vector4( a/2,  a/2,  a/2, 0.)
 		};
 		
-		tetrahedron(v[0], v[1], v[4], v[2]);
-		tetrahedron(v[5], v[4], v[1], v[7]);
-		tetrahedron(v[7], v[3], v[2], v[1]);
-		tetrahedron(v[2], v[6], v[7], v[4]);
+		tetrahedron(v[0], v[2], v[1], v[4]);
+		tetrahedron(v[5], v[7], v[4], v[1]);
+		tetrahedron(v[6], v[4], v[7], v[2]);
+		tetrahedron(v[3], v[1], v[2], v[7]);
 		tetrahedron(v[2], v[7], v[1], v[4]);
+	}
+	
+	public void cube(Vector4[] vertices, int i0, int i1, int i2, int i3, int i4, int i5, int i6, int i7)
+	{
+		Vector4[] v = {
+				vertices[i0],
+				vertices[i1],
+				vertices[i2],
+				vertices[i3],
+				vertices[i4],
+				vertices[i5],
+				vertices[i6],
+				vertices[i7]
+			};
+		
+		tetrahedron(v[0], v[2], v[1], v[4]);
+		tetrahedron(v[5], v[7], v[4], v[1]);
+		tetrahedron(v[6], v[4], v[7], v[2]);
+		tetrahedron(v[3], v[1], v[2], v[7]);
+		tetrahedron(v[2], v[7], v[1], v[4]);
+	}
+	
+	public void tesseract(double a)
+	{
+		Vector4[] v = {
+				new Vector4(-a/2, -a/2, -a/2, -a/2),
+				new Vector4(-a/2, -a/2, -a/2,  a/2),
+				new Vector4(-a/2, -a/2,  a/2, -a/2),
+				new Vector4(-a/2, -a/2,  a/2,  a/2),
+				new Vector4(-a/2,  a/2, -a/2, -a/2),
+				new Vector4(-a/2,  a/2, -a/2,  a/2),
+				new Vector4(-a/2,  a/2,  a/2, -a/2),
+				new Vector4(-a/2,  a/2,  a/2,  a/2),
+				new Vector4( a/2, -a/2, -a/2, -a/2),
+				new Vector4( a/2, -a/2, -a/2,  a/2),
+				new Vector4( a/2, -a/2,  a/2, -a/2),
+				new Vector4( a/2, -a/2,  a/2,  a/2),
+				new Vector4( a/2,  a/2, -a/2, -a/2),
+				new Vector4( a/2,  a/2, -a/2,  a/2),
+				new Vector4( a/2,  a/2,  a/2, -a/2),
+				new Vector4( a/2,  a/2,  a/2,  a/2)
+		};
+		cube(v, 0,1,2,3,4,5,6,7);
+		cube(v, 8,9,10,11,12,13,14,15);
+		cube(v, 0,1,2,3,8,9,10,11);
+		cube(v, 4,5,6,7,12,13,14,15);
+		cube(v, 0,1,4,5,8,9,12,13);
+		cube(v, 2,3,6,7,10,11,14,15);
+		cube(v, 0,2,4,6,8,10,12,14);
+		cube(v, 1,3,5,7,9,11,13,15);
+	}
+	
+	public void setBlending(double a)
+	{
+		GLES20.glEnable(GLES20.GL_BLEND);
+		GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
+		if(a < 0.99) GLES20.glDepthMask(false);
+		else 
+		{
+			GLES20.glDisable(GLES20.GL_BLEND);
+			GLES20.glDepthMask(true);
+		}
 	}
 	
 	public void render()
@@ -165,12 +227,17 @@ public class Renderer {
 			}
 			primBuffer.remove(0);
 		}
-
+		
+		GLES20.glDepthMask(true);
 		GLES20.glClearColor(0.f, 0.f, 0.3f, 1.f);
 		GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT | GLES20.GL_COLOR_BUFFER_BIT);
 	    
 	    // draw local buffer
 	    for(int i = 0; i < localBuffer.size(); i++)
-	    	localBuffer.get(i).draw(this);
+	    {
+	    	Primitive prim = localBuffer.get(i);
+	    	setBlending(prim.vertex(0).c.a);
+	    	prim.draw(this);
+	    }
 	}
 }
