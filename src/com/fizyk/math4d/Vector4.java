@@ -127,4 +127,14 @@ public class Vector4 {
 	{
 		return coord[i]/coord[4];
 	}
+	
+	public static Vector4 crossProduct(Vector4 v1, Vector4 v2, Vector4 v3)
+	{
+		Vector4 result = new Vector4();
+		result.coord[0] = (v1.y()*v2.z()*v3.w())+(v1.z()*v2.w()*v3.y())+(v1.w()*v2.y()*v3.z())-(v1.y()*v2.w()*v3.z())-(v1.z()*v2.y()*v3.w())-(v1.w()*v2.z()*v3.y());
+		result.coord[1] = (v1.z()*v2.w()*v3.x())+(v1.w()*v2.x()*v3.z())+(v1.x()*v2.z()*v3.w())-(v1.z()*v2.x()*v3.w())-(v1.w()*v2.z()*v3.x())-(v1.x()*v2.w()*v3.z());
+		result.coord[2] = (v1.w()*v2.x()*v3.y())+(v1.x()*v2.y()*v3.w())+(v1.y()*v2.w()*v3.x())-(v1.w()*v2.y()*v3.x())-(v1.x()*v2.w()*v3.y())-(v1.y()*v2.x()*v3.w());
+		result.coord[3] = (v1.x()*v2.y()*v3.z())+(v1.y()*v2.z()*v3.x())+(v1.z()*v2.x()*v3.y())-(v1.x()*v2.z()*v3.y())-(v1.y()*v2.x()*v3.z())-(v1.z()*v2.y()*v3.x());
+		return result;
+	}
 }

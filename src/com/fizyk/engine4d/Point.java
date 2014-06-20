@@ -28,18 +28,20 @@ public class Point extends Primitive {
 	@Override
 	public void draw(Renderer graph4d) 
 	{
-		GLES20.glEnableVertexAttribArray(graph4d.getVertexHandle());
-		GLES20.glVertexAttribPointer(graph4d.getVertexHandle(), 3, GLES20.GL_FLOAT, false,
+		int vertexHandle = graph4d.shader.getVertexHandle();
+		int colorHandle = graph4d.shader.getColorHandle();
+		GLES20.glEnableVertexAttribArray(vertexHandle);
+		GLES20.glVertexAttribPointer(vertexHandle, 3, GLES20.GL_FLOAT, false,
 	            0, getVData());
 
-		GLES20.glEnableVertexAttribArray(graph4d.getColorHandle());
-		GLES20.glVertexAttribPointer(graph4d.getColorHandle(), 4, GLES20.GL_FLOAT, false,
+		GLES20.glEnableVertexAttribArray(colorHandle);
+		GLES20.glVertexAttribPointer(colorHandle, 4, GLES20.GL_FLOAT, false,
 	            0, getCData());
 		
 		GLES20.glDrawArrays(GLES20.GL_POINTS, 0, 1);
 		
-		GLES20.glDisableVertexAttribArray(graph4d.getVertexHandle());
-		GLES20.glDisableVertexAttribArray(graph4d.getColorHandle());
+		GLES20.glDisableVertexAttribArray(vertexHandle);
+		GLES20.glDisableVertexAttribArray(colorHandle);
 	}
 
 	@Override

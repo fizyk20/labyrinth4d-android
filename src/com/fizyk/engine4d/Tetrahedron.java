@@ -44,12 +44,14 @@ public class Tetrahedron extends Primitive {
 	@Override
 	public void draw(Renderer graph4d)
 	{
-		GLES20.glEnableVertexAttribArray(graph4d.getVertexHandle());
-		GLES20.glVertexAttribPointer(graph4d.getVertexHandle(), 3, GLES20.GL_FLOAT, false,
+		int vertexHandle = graph4d.shader.getVertexHandle();
+		int colorHandle = graph4d.shader.getColorHandle();
+		GLES20.glEnableVertexAttribArray(vertexHandle);
+		GLES20.glVertexAttribPointer(vertexHandle, 3, GLES20.GL_FLOAT, false,
 	            0, getVData());
 
-		GLES20.glEnableVertexAttribArray(graph4d.getColorHandle());
-		GLES20.glVertexAttribPointer(graph4d.getColorHandle(), 4, GLES20.GL_FLOAT, false,
+		GLES20.glEnableVertexAttribArray(colorHandle);
+		GLES20.glVertexAttribPointer(colorHandle, 4, GLES20.GL_FLOAT, false,
 	            0, getCData());
 		
 		ShortBuffer drawListBuffer;
@@ -62,8 +64,8 @@ public class Tetrahedron extends Primitive {
 		
 		GLES20.glDrawElements(GLES20.GL_TRIANGLES, 12, GLES20.GL_UNSIGNED_SHORT, drawListBuffer);
 		
-		GLES20.glDisableVertexAttribArray(graph4d.getVertexHandle());
-		GLES20.glDisableVertexAttribArray(graph4d.getColorHandle());
+		GLES20.glDisableVertexAttribArray(vertexHandle);
+		GLES20.glDisableVertexAttribArray(colorHandle);
 	}
 	
 	@Override
