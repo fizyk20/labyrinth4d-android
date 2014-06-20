@@ -17,6 +17,8 @@ public class Renderer {
 
 	public Camera camera;
 	public Shader shader;
+	private SimpleShader simpleShader;
+	private LightShader lightShader;
 				
 	public Renderer()
 	{
@@ -24,12 +26,30 @@ public class Renderer {
 		primBuffer = new Vector<Primitive>();
 		localBuffer = new Vector<Primitive>();
 		matrixStack = new MatrixStack();
-		shader = new SimpleShader();
-	    
+		simpleShader = new SimpleShader();
+		lightShader = new LightShader();
+		
+		shader = simpleShader;
 	    shader.useProgram();
+	    
+		GLES20.glDisable(GLES20.GL_CULL_FACE);
+		GLES20.glEnable(GLES20.GL_DEPTH_TEST);
 	}
 	
+	public void enableLighting(boolean enable)
+	{
+		if(enable)
+			shader = lightShader;
+		else
+			shader = simpleShader;
+		shader.useProgram();
+	}
 	
+	public void setLightDir(float x, float y, float z)
+	{
+		float[] lightDir = {x, y, z};
+		lightShader.setLightDir(lightDir);
+	}
 	
 	public void setupProjection(int width, int height)
 	{
@@ -37,7 +57,8 @@ public class Renderer {
 		GLES20.glViewport(0, 0, width, height);
 		float[] mProjectionMatrix = new float[16];
 		Matrix.frustumM(mProjectionMatrix, 0, -ratio, ratio, -1, 1, 1, 1000);
-		shader.setMatrix(MatrixType.PROJECTION, mProjectionMatrix);
+		lightShader.setMatrix(MatrixType.PROJECTION, mProjectionMatrix);
+		simpleShader.setMatrix(MatrixType.PROJECTION, mProjectionMatrix);
 	}
 	
 	public void pushMatrix()
@@ -121,8 +142,8 @@ public class Renderer {
 		
 		tetrahedron(v[0], v[1], v[4], v[2]);
 		tetrahedron(v[5], v[4], v[1], v[7]);
-		tetrahedron(v[7], v[2], v[3], v[1]);
-		tetrahedron(v[2], v[7], v[6], v[4]);
+		tetrahedron(v[7], v[3], v[2], v[1]);
+		tetrahedron(v[2], v[6], v[7], v[4]);
 		tetrahedron(v[2], v[7], v[1], v[4]);
 	}
 	
@@ -144,7 +165,7 @@ public class Renderer {
 			}
 			primBuffer.remove(0);
 		}
-		
+
 		GLES20.glClearColor(0.f, 0.f, 0.3f, 1.f);
 		GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT | GLES20.GL_COLOR_BUFFER_BIT);
 	    

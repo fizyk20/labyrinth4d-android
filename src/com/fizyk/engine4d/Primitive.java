@@ -6,7 +6,7 @@ import java.nio.FloatBuffer;
 
 import com.fizyk.math4d.Hyperplane;
 
-public class Primitive
+abstract class Primitive
 {
 	protected Vertex[] v;
 	
@@ -32,6 +32,11 @@ public class Primitive
 				cData.put((float)v[i].c.toVector().getCoord(j));
 		cData.position(0);
 		return cData;
+	}
+	
+	public FloatBuffer getNormals()
+	{
+		return null;
 	}
 	
 	public void draw(Renderer graph4d)

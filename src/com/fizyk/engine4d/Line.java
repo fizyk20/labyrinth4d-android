@@ -31,6 +31,7 @@ public class Line extends Primitive {
 	@Override
 	public void draw(Renderer graph4d)
 	{
+		graph4d.enableLighting(false);
 		int vertexHandle = graph4d.shader.getVertexHandle();
 		int colorHandle = graph4d.shader.getColorHandle();
 		GLES20.glEnableVertexAttribArray(vertexHandle);

@@ -2,7 +2,7 @@ package com.fizyk.engine4d;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.nio.ShortBuffer;
+import java.nio.FloatBuffer;
 import java.util.Vector;
 
 import android.opengl.GLES20;
@@ -41,11 +41,59 @@ public class Tetrahedron extends Primitive {
 		v[3] = v4;
 	}
 	
+	public FloatBuffer getVData()
+	{
+		ByteBuffer bb = ByteBuffer.allocateDirect(12*4*3);
+		bb.order(ByteOrder.nativeOrder());
+		FloatBuffer vData = bb.asFloatBuffer();
+		for(int i = 0; i < 12; i++)
+			for(int j = 0; j < 3; j++)
+				vData.put((float)v[drawOrder[i]].pos.getCoord(j));
+		vData.position(0);
+		return vData;
+	}
+	
+	public FloatBuffer getCData()
+	{
+		ByteBuffer bb = ByteBuffer.allocateDirect(12*4*4);
+		bb.order(ByteOrder.nativeOrder());
+		FloatBuffer cData = bb.asFloatBuffer();
+		for(int i = 0; i < 12; i++)
+			for(int j = 0; j < 4; j++)
+				cData.put((float)v[drawOrder[i]].c.toVector().getCoord(j));
+		cData.position(0);
+		return cData;
+	}
+	
+	public FloatBuffer getNormals()
+	{
+		ByteBuffer bb = ByteBuffer.allocateDirect(12*4*4);
+		bb.order(ByteOrder.nativeOrder());
+		FloatBuffer cData = bb.asFloatBuffer();
+		
+		for(int i = 0; i < 4; i++)
+		{
+			Vector4 v1 = v[drawOrder[i*3 + 1]].pos.sub(v[drawOrder[i*3 + 0]].pos);
+			Vector4 v2 = v[drawOrder[i*3 + 2]].pos.sub(v[drawOrder[i*3 + 0]].pos);
+			Vector4 normal = Vector4.crossProduct(v2, v1, new Vector4(0.,0.,0.,1.));
+			normal.normalize();
+			float[] data = {(float)normal.getCoord(0), (float)normal.getCoord(1), (float)normal.getCoord(2)};
+			cData.put(data);
+			cData.put(data);
+			cData.put(data);
+		}
+		
+		cData.position(0);
+		return cData;
+	}
+	
 	@Override
 	public void draw(Renderer graph4d)
 	{
+		graph4d.enableLighting(true);
 		int vertexHandle = graph4d.shader.getVertexHandle();
 		int colorHandle = graph4d.shader.getColorHandle();
+		int normalHandle = graph4d.shader.getNormalHandle();
 		GLES20.glEnableVertexAttribArray(vertexHandle);
 		GLES20.glVertexAttribPointer(vertexHandle, 3, GLES20.GL_FLOAT, false,
 	            0, getVData());
@@ -53,19 +101,16 @@ public class Tetrahedron extends Primitive {
 		GLES20.glEnableVertexAttribArray(colorHandle);
 		GLES20.glVertexAttribPointer(colorHandle, 4, GLES20.GL_FLOAT, false,
 	            0, getCData());
+
+		GLES20.glEnableVertexAttribArray(normalHandle);
+		GLES20.glVertexAttribPointer(normalHandle, 3, GLES20.GL_FLOAT, false,
+	            0, getNormals());
 		
-		ShortBuffer drawListBuffer;
-		// initialize byte buffer for the draw list
-        ByteBuffer dlb = ByteBuffer.allocateDirect(drawOrder.length * 2);
-        dlb.order(ByteOrder.nativeOrder());
-        drawListBuffer = dlb.asShortBuffer();
-        drawListBuffer.put(drawOrder);
-        drawListBuffer.position(0);
-		
-		GLES20.glDrawElements(GLES20.GL_TRIANGLES, 12, GLES20.GL_UNSIGNED_SHORT, drawListBuffer);
+		GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, 12);
 		
 		GLES20.glDisableVertexAttribArray(vertexHandle);
 		GLES20.glDisableVertexAttribArray(colorHandle);
+		GLES20.glDisableVertexAttribArray(normalHandle);
 	}
 	
 	@Override

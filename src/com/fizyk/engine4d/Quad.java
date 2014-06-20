@@ -2,6 +2,7 @@ package com.fizyk.engine4d;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
 import java.util.Vector;
 
@@ -42,11 +43,31 @@ public class Quad extends Primitive {
 		v[3] = v4;
 	}
 	
+	public FloatBuffer getNormals()
+	{
+		ByteBuffer bb = ByteBuffer.allocateDirect(nVertices()*4*4);
+		bb.order(ByteOrder.nativeOrder());
+		FloatBuffer cData = bb.asFloatBuffer();
+		
+		Vector4 v1 = v[1].pos.sub(v[0].pos);
+		Vector4 v2 = v[2].pos.sub(v[0].pos);
+		Vector4 normal = Vector4.crossProduct(v1, v2, new Vector4(0.,0.,0.,1.));
+		normal.normalize();
+		
+		for(int i = 0; i < 4; i++)
+			for(int j = 0; j < 3; j++)
+				cData.put((float)normal.getCoord(j));
+		
+		cData.position(0);
+		return cData;
+	}
+	
 	@Override
 	public void draw(Renderer graph4d)
 	{
 		int vertexHandle = graph4d.shader.getVertexHandle();
 		int colorHandle = graph4d.shader.getColorHandle();
+		int normalHandle = graph4d.shader.getNormalHandle();
 		GLES20.glEnableVertexAttribArray(vertexHandle);
 		GLES20.glVertexAttribPointer(vertexHandle, 3, GLES20.GL_FLOAT, false,
 	            0, getVData());
@@ -54,6 +75,10 @@ public class Quad extends Primitive {
 		GLES20.glEnableVertexAttribArray(colorHandle);
 		GLES20.glVertexAttribPointer(colorHandle, 4, GLES20.GL_FLOAT, false,
 	            0, getCData());
+
+		GLES20.glEnableVertexAttribArray(normalHandle);
+		GLES20.glVertexAttribPointer(normalHandle, 3, GLES20.GL_FLOAT, false,
+	            0, getNormals());
 		
 		ShortBuffer drawListBuffer;
 		// initialize byte buffer for the draw list
@@ -67,6 +92,7 @@ public class Quad extends Primitive {
 		
 		GLES20.glDisableVertexAttribArray(vertexHandle);
 		GLES20.glDisableVertexAttribArray(colorHandle);
+		GLES20.glDisableVertexAttribArray(normalHandle);
 	}
 
 	@Override
