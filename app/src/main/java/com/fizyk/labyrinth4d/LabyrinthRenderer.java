@@ -39,8 +39,8 @@ public class LabyrinthRenderer implements GLSurfaceView.Renderer {
 		double angle2 = (double)(time % 6000L) / 6000. * 6.283;
 		//graph4d.rotate(new Vector4(0., 0., 0., 1.), new Vector4(0., 1., 0., 0.), 0.5);
 		//graph4d.rotate(new Vector4(0., 0., 0., 1.), new Vector4(1., 0., 0., 0.), 0.5);
-		graph4d.rotate(new Vector4(0., 0., 0., 1.), new Vector4(0., 1., 0., 0.), angle1);
-		graph4d.rotate(new Vector4(1., 0., 0., 0.), new Vector4(0., 0., 1., 0.), angle2);
+		graph4d.rotate(new Vector4(0., 0., 0., 1.), new Vector4(0.5, 1., 0., 0.), angle1);
+		graph4d.rotate(new Vector4(1., -0.5, 0., 0.), new Vector4(0., 0., 1., 0.), angle2);
 		graph4d.translate(new Vector4(0., 0., 8., 0.));
 		graph4d.setColor(new Color(0., 1., 1., 1.));
 		graph4d.tesseract(2.0);
